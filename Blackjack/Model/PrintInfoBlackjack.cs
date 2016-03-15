@@ -18,7 +18,7 @@ namespace Blackjack
         {
             Console.WriteLine("Счет: Победа : Поражение    {0}:{1}", win, loss);
         }
-
+        
         public void PrintResult(ResultGame resGame)
         {
             switch (resGame)
@@ -28,12 +28,12 @@ namespace Blackjack
                 case ResultGame.Win: Console.WriteLine("Поздравляю. Вы выйграли! Раунд завершен"); break;
             }
         }
-
+        
         public void PrintSpot (int spot)
         {
             Console.WriteLine("Счет = {0}", spot);
         }
-
+        
         public void PrintOtherMes(TypeMessage typeMsg)
         {
             switch (typeMsg)

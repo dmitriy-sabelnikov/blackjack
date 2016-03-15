@@ -21,7 +21,6 @@ namespace Blackjack
             cards = new List<Card>();
             State = Status.Play;
         }
-
         // Взять карту
         public void TakeCard(Card card)
         {
@@ -29,7 +28,6 @@ namespace Blackjack
                 return;
             cards.Add(card);
         }
-        
         // Получить счет карт
         public int GetSpot()
         {
@@ -55,13 +53,11 @@ namespace Blackjack
             }
             return sm;
         }
-        
         // Сдать все карты (очистка коллекции)
         public void GiveBackCards()
         {
             cards.Clear();
         }
-        
         // Сказать достаточно
         public void SayEnough()
         {

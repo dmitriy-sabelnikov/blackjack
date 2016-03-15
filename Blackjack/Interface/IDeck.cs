@@ -8,10 +8,10 @@ namespace Blackjack
 {
     interface IDeck
     {
-        int CountCard { get;}
+        int CountCard { get; }           // Количество карт   
         Card this[int index] { get; }
-        void FillDeck();
-        void Shuffle();
-        Card GetCard();
+        void FillDeck();                 // Заполнить колоду
+        void Shuffle();                  // тасование карт
+        Card GetCard();                  // Сдать карту 
     }
 }

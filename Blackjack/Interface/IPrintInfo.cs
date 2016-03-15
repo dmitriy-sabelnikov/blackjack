@@ -11,10 +11,10 @@ namespace Blackjack
 
     interface IPrintInfo
     {
-        void PrintCards(List<Card> cards);
-        void PrintScore(int win, int loss);
-        void PrintResult(ResultGame resGame);
-        void PrintSpot(int spot);
-        void PrintOtherMes(TypeMessage typeMsg);
+        void PrintCards(List<Card> cards);         // Печатать карты
+        void PrintScore(int win, int loss);        // Печатать счет
+        void PrintResult(ResultGame resGame);      // Печатать результат игры 
+        void PrintSpot(int spot);                  // Печатать количество очков карт 
+        void PrintOtherMes(TypeMessage typeMsg);   // Печатать вспомогательный сообщения
     }
 }

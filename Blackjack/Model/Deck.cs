@@ -18,8 +18,7 @@ namespace Blackjack
             CountCard = 52;
             cards = new Card[CountCard];
             FillDeck ();
-        }
-        
+        }      
         // индексатор
         public Card this[int index]
         {
@@ -28,8 +27,6 @@ namespace Blackjack
                 return cards[index];
             }
         }
-
-        
         public void FillDeck ()
         {
             if (CountCard != 52)

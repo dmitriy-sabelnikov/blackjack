@@ -10,14 +10,14 @@ namespace Blackjack
 
     interface ICroupier
     {
-        List<Card> cards { get; set; }
-        int Loss { get; set; }
-        int Win { get; set; }
-        Status State { get; set; }
-        void TakeCard(Card card);
-        int GetSpot();
-        void GiveBackCards();
-        void SayEnough();
-        int CountCards();
+        List<Card> cards { get; set; }// Карты игрока
+        int Loss { get; set; }        // Количество поражений
+        int Win { get; set; }         // Количество побед
+        Status State { get; set; }    // Статус игрока
+        void TakeCard(Card card);     // Взять карту
+        int GetSpot();                // Получить счет карт
+        void GiveBackCards();         // Сдать все карты (очистка коллекции)
+        void SayEnough();             // Сказать достаточно
+        int CountCards();             // Количество карт
     }
 }
