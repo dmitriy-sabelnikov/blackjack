@@ -11,8 +11,13 @@ namespace Blackjack
         static void Main(string[] args)
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            Game game = new Game();
-            Deck deck = new Deck();
+            
+            IDeck deck = new Deck();
+            Croupier croupier = new Player();
+            Player gamer = new Player();
+            IPrintInfo printInfo = new PrintInfoBlackjack();
+            Game game = new Game(croupier, gamer, deck, printInfo);
+            
             ConsoleKeyInfo cki;
             do
             {
@@ -29,9 +34,8 @@ namespace Blackjack
                 {   // Показать всю колоду
                     case ConsoleKey.F1:
                         Console.Clear();
-                        for (int i = 0; i < deck.CountCard; i++ )
+                        for (int i = 0; i < deck.CountCard; i++)
                             Console.WriteLine("{0}) \t{1}-{2}", i+1, deck[i].Suit, deck[i].Value);
-
                         Console.ReadKey();
                         break;
                     // Помешать колоду
@@ -44,21 +48,19 @@ namespace Blackjack
                     // Сбросить счет 
                     case ConsoleKey.F3:
                         Console.Clear();
-                        game.ClearScore();
+                        game.ClearScore(gamer);
                         Console.WriteLine("Счет сброшен");
                         Console.ReadKey();
                         break;
                     // Начать раунд 
                     case ConsoleKey.F4:
                         Console.Clear();
-                        game.StartRound(deck);
+                        game.StartRound();
                         Console.ReadKey();
-                        deck.RestoreDeck();
+                        deck.FillDeck();
                         deck.Shuffle();
                         break;
-
                 }
-
             }
             while (cki.Key != ConsoleKey.Escape && cki.Key != ConsoleKey.F10);
         }
