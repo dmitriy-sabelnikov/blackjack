@@ -7,67 +7,62 @@ using System.Threading.Tasks;
 
 namespace Blackjack
 {
-    // класс колода
-    class Deck : IDeck
+    class Deck 
     {
-        public int CountCard { get; private set; } // Количество карт 
-        Card[] cards;
-        
+        public List<Card> cards {get; set;}
+
         public Deck ()
         {
-            CountCard = 52;
-            cards = new Card[CountCard];
+            cards = new List<Card>();
             FillDeck ();
         }      
-        // индексатор
-        public Card this[int index]
-        {
-            get 
-            {
-                return cards[index];
-            }
-        }
+
         public void FillDeck ()
         {
-            if (CountCard != 52)
-                CountCard = 52;
-            Suits st = Suits.Club;
-            Values val = Values.two;
-            for (int i = 0; i < CountCard; i++)
+            cards.Clear();
+            for (Suits suit = Suits.Club; suit <= Suits.Spade; suit++ )
             {
-                cards[i] = new Card() { Suit = st, Value = val };
-
-                if (val == Values.ace)
+                for (Values value = Values.Two; value <= Values.Ace; value++)
                 {
-                    val = Values.two;
-                    st++;
-                }
-                else
-                {
-                    val++;
+                    int point = 0;
+                    switch (value)
+                    {
+                        case Values.Two: point = 2; break;
+                        case Values.Three: point = 3; break;
+                        case Values.Four: point = 4; break;
+                        case Values.Five: point = 5; break;
+                        case Values.Six: point = 6; break;
+                        case Values.Seven: point = 7; break;
+                        case Values.Eight: point = 8; break;
+                        case Values.Nine: point = 9; break;
+                        case Values.Ten: point = 10; break;
+                        case Values.Knave: point = 10; break;
+                        case Values.Queen: point = 10; break;
+                        case Values.King: point = 10; break;
+                        case Values.Ace: point = 11; break;
+                    }
+                    cards.Add(new Card() { Suit = suit, Value = value, Point = point });
                 }
             }
         }
-        // тасование карт
+
         public void Shuffle ()
         {
             Random rnd = new Random();
-            for (int i = 0; i < CountCard; i++)
+            for (int i = 0; i < cards.Count; i++)
             {
                 int j = rnd.Next(0, i);
-                Card tmp = cards[i];
+                Card bufferCard = cards[i];
                 cards[i] = cards[j];
-                cards[j] = tmp;
+                cards[j] = bufferCard;
             }
         }
-        // Сдать одну карту 
+
         public Card GetCard()
         {
-            if (CountCard < 0)
-                return null;
-            Card retCard = cards[CountCard - 1];
-            CountCard--;
-            return retCard;
+            Card returnCard = cards[cards.Count-1];
+            cards.Remove(returnCard);
+            return returnCard;
         }
     }
 }

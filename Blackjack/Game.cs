@@ -6,51 +6,181 @@ using System.Threading.Tasks;
 
 namespace Blackjack
 {
-    // Класс игра
     class Game
     {
         Croupier croupier;
         Player gamer;
-        IDeck deck;
-        IPrintInfo printInfo;
-        // Отобразить информацию о картах крупье и игрока
-        void showPlayersCards(Croupier croupier, Player gamer)
-        {
-            printInfo.PrintOtherMes(TypeMessage.CardCrp);
-            printInfo.PrintCards(croupier.cards);
-            printInfo.PrintSpot(croupier.GetSpot());
+        Deck deck;
+        int croupierSpot;
+        int gamerSpot;
 
-            printInfo.PrintOtherMes(TypeMessage.CardPlr); 
-            printInfo.PrintCards(gamer.cards);
-            printInfo.PrintSpot(gamer.GetSpot());
+        void ShowPlayersCards(Croupier croupier, Player gamer)
+        {
+            PrintInfo.PrintOtherMes(TypeMessage.CardCroupier);
+            PrintInfo.PrintCards(croupier.cards);
+            PrintInfo.PrintSpot(PlayerSpot(croupier));
+
+            PrintInfo.PrintOtherMes(TypeMessage.CardPlayer); 
+            PrintInfo.PrintCards(gamer.cards);
+            PrintInfo.PrintSpot(PlayerSpot(gamer));
         }
-        // Финализация игры - Отображение результата, сдача карт игроком/крупье
-        void resultGame (ResultGame res)
+        
+        void GiveCard(Croupier player, int countCard)
+        {
+            for (int i = 0; i < countCard; i++ )
+                player.TakeCard(deck.GetCard());
+        }
+
+        void FinishRound (ResultGame res)
         {
             gamer.State = Status.Play;
+            croupier.State = Status.Play;
             gamer.GiveBackCards();
             croupier.GiveBackCards();
-            switch (res)
+            if (res == ResultGame.Draw)
             {
-                case ResultGame.Draw:
-                    printInfo.PrintResult(ResultGame.Draw);
-                    break;
-                case ResultGame.Loss: 
-                    gamer.Loss += 1;
-                    printInfo.PrintResult(ResultGame.Loss);
-                    break;
-                case ResultGame.Win: 
-                    gamer.Win += 1;
-                    printInfo.PrintResult(ResultGame.Win);
-                    break;
+                PrintInfo.PrintResult(ResultGame.Draw);
+            }
+            if (res == ResultGame.Loss)
+            {
+                gamer.Loss += 1;
+                PrintInfo.PrintResult(ResultGame.Loss);
+            }
+            if (res == ResultGame.Win)
+            {
+                gamer.Win += 1;
+                PrintInfo.PrintResult(ResultGame.Win);
             }
         }
-        public Game(Croupier croupier, Player gamer, IDeck deck, IPrintInfo printInfo)
+
+        int PlayerSpot(Croupier player)
+        {
+            int spot = 0;
+            for (int i = 0; i < player.cards.Count; i++)
+                spot += player.cards[i].Point;
+            return spot;
+        }
+
+        void StepCoupier ()
+        {
+            // Croupier must say enough while spot more then 17 point
+            while (croupier.State == Status.Play)
+            {
+                if (PlayerSpot(croupier) > 17)
+                {
+                    croupier.State = Status.Enough;
+                    break;
+                }
+                PrintInfo.PrintOtherMes(TypeMessage.StepCroupier);
+                GiveCard(croupier, 1);
+                ShowPlayersCards(croupier, gamer);
+            }
+        }
+
+        void CroupierTakeSecondCard()
+        {
+            PrintInfo.PrintOtherMes(TypeMessage.StepCroupier);
+            GiveCard(croupier, 1);
+            ShowPlayersCards(croupier, gamer);
+        }
+ 
+        void GamerMustSayEnough (Player gamer, int spot)
+        {
+            if (spot >= 21)
+            {
+                gamer.State = Status.Enough;
+            }
+        }
+
+        void StepGamerTakeOneCard (Player gamer)
+        {
+            GiveCard(gamer, 1);
+            ShowPlayersCards(croupier, gamer);
+            GamerMustSayEnough(gamer, PlayerSpot(gamer));
+        }
+
+        void StepGamerRefuseOneCard (Player gamer)
+        {
+            gamer.Refuse();
+            GiveCard(gamer, 2);
+            ShowPlayersCards(croupier, gamer);
+            GamerMustSayEnough(gamer, PlayerSpot(gamer));
+        }
+
+        void StepGamer ()
+        {
+            ConsoleKeyInfo cki;
+            while (gamer.State == Status.Play)
+            {
+                PrintInfo.PrintOtherMes(TypeMessage.MenuPlayer);
+                cki = WorkKey.GetPressKey();
+                //Gamer take one card
+                if (WorkKey.CompareKey(cki, ConsoleKey.F5))
+                {
+                    StepGamerTakeOneCard(gamer);
+                }
+                //Gamer refuse one card
+                if (WorkKey.CompareKey(cki, ConsoleKey.F6))
+                {
+                }
+                // Gamer say Enough
+                if (WorkKey.CompareKey(cki, ConsoleKey.F7))
+                {
+                    gamer.State = Status.Enough;
+                }
+            }
+        }
+
+        void ResultBlackJack (int croupierSpot, int gamerSpot)
+        {
+            if (gamerSpot > 21)
+            {
+                FinishRound(ResultGame.Loss);
+                return;
+            }
+            if (croupierSpot > 21 || gamerSpot > croupierSpot)
+            {
+                FinishRound(ResultGame.Win);
+                return;
+            }
+            if (gamerSpot < croupierSpot)
+            {
+                FinishRound(ResultGame.Loss);
+                return;
+            }
+            if (gamerSpot == croupierSpot)
+            {
+                FinishRound(ResultGame.Draw);
+                return;
+            }
+        }
+
+        void InitRound (Croupier croupier, Player gamer)
+        {
+            PrintInfo.PrintScore(gamer.Win, gamer.Loss);
+            GiveCard(gamer, 2);
+            GiveCard(croupier, 1);
+            ShowPlayersCards(croupier, gamer); 
+        }
+
+        ConsoleKeyInfo ChooseGamerDraw ()
+        {
+            ConsoleKeyInfo cki;
+            do
+            {
+                PrintInfo.PrintOtherMes(TypeMessage.FinishRound);
+                cki = WorkKey.GetPressKey();
+            }
+            while (WorkKey.CompareKey(cki, ConsoleKey.Y) && WorkKey.CompareKey(cki, ConsoleKey.N));
+            return cki;
+        }
+
+
+        public Game(Croupier croupier, Player gamer, Deck deck)
         {
             this.croupier = croupier;
             this.gamer = gamer;
             this.deck = deck;
-            this.printInfo = printInfo;
         }
 
         public void ClearScore(Player gamer)
@@ -61,101 +191,43 @@ namespace Blackjack
 
         public void StartRound()
         {
-            printInfo.PrintScore(gamer.Win, gamer.Loss);
-            // Сдаем две карты игроку 
-            gamer.TakeCard(deck.GetCard());
-            gamer.TakeCard(deck.GetCard());
-            //одну - крупье
-            croupier.TakeCard(deck.GetCard());
-            showPlayersCards(croupier, gamer);
- 
-            // если на руках 21 очко и у крупье не выше 10 очков то выйгрыш
-            ConsoleKeyInfo cki;
-            if (gamer.GetSpot() == 21 && croupier.GetSpot() < 10)
+            InitRound(croupier, gamer);
+            gamerSpot = PlayerSpot(gamer);
+            croupierSpot = PlayerSpot(croupier);
+            // if gamer has 21 spot and croupier has less 10 then win
+            if (gamerSpot == 21 && croupierSpot < 10)
             {
-                resultGame(ResultGame.Win);
+                FinishRound(ResultGame.Win);
                 return;
             }
-            // если у крупье 10 или 11 очков, тогда игрок может забрать свою ставку (ничья)
-            if (gamer.GetSpot() == 21 && croupier.GetSpot() >= 10)
+            // if gamer has 21 spot and croupier has 10 or 11 then gamer can say Draw
+            if (gamerSpot == 21 && (croupierSpot == 10 || croupierSpot == 11))
             {
-                do
+                if (WorkKey.CompareKey(ChooseGamerDraw(), ConsoleKey.Y))
                 {
-                    printInfo.PrintOtherMes(TypeMessage.FinishRound);
-                    cki = Console.ReadKey();
-                }
-                while (cki.Key != ConsoleKey.Y && cki.Key != ConsoleKey.N);
-
-                if (cki.Key == ConsoleKey.Y)
-                {
-                    resultGame(ResultGame.Draw);
+                    FinishRound(ResultGame.Draw);
                     return;
                 }
             }
-            printInfo.PrintOtherMes(TypeMessage.stepPlr);
-            while (gamer.State == Status.Play)
+            StepGamer ();
+            gamerSpot = PlayerSpot(gamer);
+            if (gamerSpot > 21)
             {
-                printInfo.PrintOtherMes(TypeMessage.MenuPlr);
-                cki = Console.ReadKey();
-                switch (cki.Key) 
-                {   // взять карту
-                    case ConsoleKey.F5: 
-                        gamer.TakeCard(deck.GetCard());
-                        showPlayersCards(croupier, gamer);
-                        if (gamer.GetSpot() >= 21)
-                            gamer.State = Status.Enough;
-                        break;
-                    // отказаться от последней карты    
-                    case ConsoleKey.F6:
-                        gamer.Refuse();
-                        gamer.TakeCard(deck.GetCard());
-                        gamer.TakeCard(deck.GetCard());
-                        showPlayersCards(croupier, gamer);
-                        if (gamer.GetSpot() >= 21)
-                            gamer.State = Status.Enough;
-                        break;
-                    // сказать достаточно 
-                    case ConsoleKey.F7: gamer.State = Status.Enough; break;
-                }
-            }
-            // Если перебор, то проигрыш
-            if (gamer.GetSpot() > 21)
-            {
-                resultGame(ResultGame.Loss);
+                FinishRound(ResultGame.Loss);
                 return;
             }
-            // если со второй карты у крупье 21, то проигрыщ
-            printInfo.PrintOtherMes(TypeMessage.stepCrp);
-            croupier.TakeCard(deck.GetCard());
-            showPlayersCards(croupier, gamer);
-            if (croupier.GetSpot() == 21)
+            CroupierTakeSecondCard();
+            croupierSpot = PlayerSpot(croupier);
+            // Croupier take second card and if croupier's spot = 21 then loss
+            if (croupierSpot == 21)
             {
-                resultGame(ResultGame.Loss);
+                FinishRound(ResultGame.Loss);
                 return;
             }
-            // крупье обязан остановиться пока не достигнет счета больше 17
-            while (croupier.GetSpot() <= 17)
-            {
-                printInfo.PrintOtherMes(TypeMessage.stepCrp);
-                croupier.TakeCard(deck.GetCard());
-                showPlayersCards(croupier, gamer);
-            }
-
-            if (croupier.GetSpot() > 21 || gamer.GetSpot() > croupier.GetSpot() )
-            {
-                resultGame(ResultGame.Win);
-                return;
-            }
-            else if (gamer.GetSpot() < croupier.GetSpot())
-            {
-                resultGame(ResultGame.Loss);
-                return;
-            }
-            else if (gamer.GetSpot() == croupier.GetSpot() )
-            {
-                resultGame(ResultGame.Draw);
-                return;
-            }
+            StepCoupier ();
+            gamerSpot = PlayerSpot(gamer);
+            croupierSpot = PlayerSpot(croupier);
+            ResultBlackJack(croupierSpot, gamerSpot);
         }
     }
 }

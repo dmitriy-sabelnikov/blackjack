@@ -42,17 +42,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MenuGame.cs" />
     <Compile Include="Model\Card.cs" />
     <Compile Include="Model\Croupier.cs" />
     <Compile Include="Model\Deck.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="Interface\ICroupier.cs" />
-    <Compile Include="Interface\IDeck.cs" />
-    <Compile Include="Interface\IPrintInfo.cs" />
     <Compile Include="Model\Player.cs" />
-    <Compile Include="Model\PrintInfoBlackjack.cs" />
+    <Compile Include="Model\PrintInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Enum\ResultGame.cs" />
+    <Compile Include="Enum\StatusPlayer.cs" />
+    <Compile Include="Enum\Suits.cs" />
+    <Compile Include="Enum\TypeMessage.cs" />
+    <Compile Include="Enum\Values.cs" />
+    <Compile Include="Model\WorkKey.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
