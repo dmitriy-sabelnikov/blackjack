@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Blackjack
 {
-    class Player : Croupier    
+    public class Player : Croupier    
     {
         public void Refuse ()
         {
-            cards.RemoveAt(cards.Count - 1);
+            PlayerCards.RemoveAt(PlayerCards.Count - 1);
         }
     }
 }

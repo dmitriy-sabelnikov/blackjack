@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Blackjack
 {
-    static class WorkKey
+    public static class WorkKey
     {
         public static ConsoleKeyInfo GetPressKey()
         {

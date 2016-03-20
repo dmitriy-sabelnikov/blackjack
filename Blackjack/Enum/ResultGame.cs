@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Blackjack
 {
-    public enum StatusPlayer 
+    public enum ResultGame 
     { 
         None = 0,
-        Play = 1, 
-        Enough = 2 
+        Win = 1,
+        Loss = 2,
+        Draw =3 
     }
 }

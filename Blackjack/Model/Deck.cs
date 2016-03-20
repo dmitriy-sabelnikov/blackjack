@@ -7,41 +7,29 @@ using System.Threading.Tasks;
 
 namespace Blackjack
 {
-    class Deck 
+    public class Deck 
     {
-        public List<Card> cards {get; set;}
+        public List<Card> DeckCards {get; set;}
 
         public Deck ()
         {
-            cards = new List<Card>();
+            DeckCards = new List<Card>();
             FillDeck ();
         }      
 
         public void FillDeck ()
         {
-            cards.Clear();
-            for (Suits suit = Suits.Club; suit <= Suits.Spade; suit++ )
+            DeckCards.Clear();
+            for (Suit suit = Suit.Club; suit <= Suit.Spade; suit++ )
             {
-                for (Values value = Values.Two; value <= Values.Ace; value++)
+                int point = 2;
+                for (CardValue value = CardValue.Two; value <= CardValue.Ace; value++)
                 {
-                    int point = 0;
-                    switch (value)
+                    DeckCards.Add(new Card() { Suit = suit, CardValue = value, Point = point });
+                    if (value < CardValue.Ten || value >= CardValue.King)
                     {
-                        case Values.Two: point = 2; break;
-                        case Values.Three: point = 3; break;
-                        case Values.Four: point = 4; break;
-                        case Values.Five: point = 5; break;
-                        case Values.Six: point = 6; break;
-                        case Values.Seven: point = 7; break;
-                        case Values.Eight: point = 8; break;
-                        case Values.Nine: point = 9; break;
-                        case Values.Ten: point = 10; break;
-                        case Values.Knave: point = 10; break;
-                        case Values.Queen: point = 10; break;
-                        case Values.King: point = 10; break;
-                        case Values.Ace: point = 11; break;
+                        point++;
                     }
-                    cards.Add(new Card() { Suit = suit, Value = value, Point = point });
                 }
             }
         }
@@ -49,19 +37,19 @@ namespace Blackjack
         public void Shuffle ()
         {
             Random rnd = new Random();
-            for (int i = 0; i < cards.Count; i++)
+            for (int i = 0; i < DeckCards.Count; i++)
             {
                 int j = rnd.Next(0, i);
-                Card bufferCard = cards[i];
-                cards[i] = cards[j];
-                cards[j] = bufferCard;
+                Card bufferCard = DeckCards[i];
+                DeckCards[i] = DeckCards[j];
+                DeckCards[j] = bufferCard;
             }
         }
 
         public Card GetCard()
         {
-            Card returnCard = cards[cards.Count-1];
-            cards.Remove(returnCard);
+            Card returnCard = DeckCards[DeckCards.Count-1];
+            DeckCards.Remove(returnCard);
             return returnCard;
         }
     }

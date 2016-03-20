@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace Blackjack
 {
-    public enum StatusPlayer 
+    public enum Suit 
     { 
         None = 0,
-        Play = 1, 
-        Enough = 2 
-    }
+        Club = 1,
+        Diamond = 2, 
+        Heart = 3, 
+        Spade = 4 
+    }; 
 }

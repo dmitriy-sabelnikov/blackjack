@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Blackjack
 {
-    static class PrintInfo  
+    public static class PrintInfo  
     {
         public static void PrintCards(List<Card> cards)
         {
             for (int i = 0; i < cards.Count; i++)
             {
-                Console.WriteLine("{0})\t{1}-{2}", i + 1, cards[i].Suit, cards[i].Value);
+                Console.WriteLine("{0})\t{1}-{2}", i + 1, cards[i].Suit, cards[i].CardValue);
             }
         }
 

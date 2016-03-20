@@ -6,37 +6,37 @@ using System.Threading.Tasks;
 
 namespace Blackjack
 {
-    class Croupier 
+    public class Croupier 
     {
-        public List<Card> cards {get; set;}
+        public List<Card> PlayerCards {get; set;}
         public int Loss { get; set; }
         public int Win { get; set; }
 
-        public Status State { get; set; }
+        public StatusPlayer State { get; set; }
 
         public Croupier()
         {
             Loss = 0;
             Win = 0;
-            cards = new List<Card>();
-            State = Status.Play;
+            PlayerCards = new List<Card>();
+            State = StatusPlayer.Play;
         }
 
         public void TakeCard(Card card)
         {
             if (card == null)
                 return;
-            cards.Add(card);
+            PlayerCards.Add(card);
         }
         // Clear List Card
         public void GiveBackCards()
         {
-            cards.Clear();
+            PlayerCards.Clear();
         }
 
         public void SayEnough()
         {
-            State = Status.Enough;
+            State = StatusPlayer.Enough;
         }
     }
 }

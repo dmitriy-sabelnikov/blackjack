@@ -53,9 +53,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Enum\ResultGame.cs" />
     <Compile Include="Enum\StatusPlayer.cs" />
-    <Compile Include="Enum\Suits.cs" />
+    <Compile Include="Enum\Suit.cs" />
     <Compile Include="Enum\TypeMessage.cs" />
-    <Compile Include="Enum\Values.cs" />
+    <Compile Include="Enum\CardValue.cs" />
     <Compile Include="Model\WorkKey.cs" />
   </ItemGroup>
   <ItemGroup>

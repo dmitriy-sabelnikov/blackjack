@@ -6,28 +6,27 @@ using System.Threading.Tasks;
 
 namespace Blackjack
 {
-
-    static class MenuGame
+    public static class MenuGame
     {
-        static void ShowAllDeck(Deck deck)
+        private static void ShowAllDeck(Deck deck)
         {
-            for (int i = 0; i < deck.cards.Count; i++)
-                Console.WriteLine("{0}) \t{1}-{2}", i + 1, deck.cards[i].Suit, deck.cards[i].Value);
+            for (int i = 0; i < deck.DeckCards.Count; i++)
+                Console.WriteLine("{0}) \t{1}-{2}", i + 1, deck.DeckCards[i].Suit, deck.DeckCards[i].CardValue);
         }
 
-        static void StartRound(Deck deck, Game game)
+        private static void StartRound(Deck deck, Game game)
         {
             game.StartRound();
             deck.FillDeck();
             deck.Shuffle();
         }
 
-        static void Shuffle (Deck deck)
+        private static void Shuffle (Deck deck)
         {
             deck.Shuffle();
         }
 
-        static void ClearScore (Game game, Player gamer)
+        private static void ClearScore (Game game, Player gamer)
         {
             game.ClearScore(gamer);
         }
