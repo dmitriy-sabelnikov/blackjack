@@ -35,7 +35,7 @@ namespace Blackjack
         {
             Console.ForegroundColor = ConsoleColor.Green;
             ConsoleKeyInfo cki;
-            do
+            while (true)
             {
                 Console.Clear();
                 Console.WriteLine("\t\t\t\t Меню");
@@ -64,12 +64,15 @@ namespace Blackjack
                 {
                     StartRound(deck, game);
                 }
-                if (!WorkKey.CompareKey(cki, ConsoleKey.F10))
+                if (WorkKey.CompareKey(cki, ConsoleKey.F10))
+                {
+                    break;
+                }
+                else
                 {
                     Console.ReadKey();
                 }
             }
-            while (!WorkKey.CompareKey(cki, ConsoleKey.F10));
         }
     }
 }

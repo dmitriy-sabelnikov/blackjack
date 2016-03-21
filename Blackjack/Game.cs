@@ -168,12 +168,15 @@ namespace Blackjack
         private ConsoleKeyInfo ChooseGamerDraw()
         {
             ConsoleKeyInfo cki;
-            do
+            while (true)
             {
                 PrintInfo.PrintOtherMes(TypeMessage.FinishRound);
                 cki = WorkKey.GetPressKey();
+                if (WorkKey.CompareKey(cki, ConsoleKey.Y) || WorkKey.CompareKey(cki, ConsoleKey.N))
+                {
+                    break;
+                }
             }
-            while (WorkKey.CompareKey(cki, ConsoleKey.Y) && WorkKey.CompareKey(cki, ConsoleKey.N));
             return cki;
         }
 
